@@ -2,11 +2,16 @@ package com.example.desafiospring.model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
+
+    @ManyToMany
+    private List<Seller> followedSellers = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,5 +53,17 @@ public abstract class User {
 
     public String getType() {
         return type;
+    }
+
+    public void addFollow(Seller sellerId){
+        this.followedSellers.add(sellerId);
+    }
+
+    public void removeFollow(Seller sellerId){
+        this.followedSellers.remove(sellerId);
+    }
+
+    public boolean findSellerInFollowedList(Seller seller){
+        return this.followedSellers.contains(seller);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class Seller extends User{
 
     @ManyToMany
-    private List<Client> clientsFollowers = new ArrayList<>();
+    private List<User> clientsFollowers = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller")
     private List<Post> posts = new ArrayList<>();
@@ -25,19 +25,19 @@ public class Seller extends User{
 
     }
 
-    public void addFollower(Client client){
-        this.clientsFollowers.add(client);
+    public void addFollower(User user){
+        this.clientsFollowers.add(user);
     }
 
-    public void removeFollower(Client client){
-        this.clientsFollowers.remove(client);
+    public void removeFollower(User user){
+        this.clientsFollowers.remove(user);
     }
 
-    public List<Client> getClientsFollowers() {
+    public List<User> getClientsFollowers() {
         return clientsFollowers;
     }
 
-    public void setClientsFollowers(List<Client> clientsFollowers) {
+    public void setClientsFollowers(List<User> clientsFollowers) {
         this.clientsFollowers = clientsFollowers;
     }
 

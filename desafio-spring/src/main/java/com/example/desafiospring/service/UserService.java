@@ -1,9 +1,11 @@
 package com.example.desafiospring.service;
 
 import com.example.desafiospring.dto.ErrorDTO;
+import com.example.desafiospring.exception.UserInvalidException;
 import com.example.desafiospring.exception.UserNotFoundException;
 import com.example.desafiospring.model.Client;
 import com.example.desafiospring.model.Seller;
+import com.example.desafiospring.model.User;
 import com.example.desafiospring.repository.ClientRepository;
 import com.example.desafiospring.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,51 +25,74 @@ public class UserService {
     @Autowired
     private SellerRepository sellerRepository;
 
-    public ResponseEntity<?> clientFollowSeller(Long clientId, Long sellerId) throws UserNotFoundException {
+    public ResponseEntity<?> clientFollowSeller(Long userId, Long sellerId) {
 
        try{
-           Optional<Client> userClient = verifyIfClientExists(clientId);
-           Optional<Seller> userSeller = verifyIfSellerExists(sellerId);
-           userClient.get().addFollow(userSeller.get());
-           userSeller.get().addFollower(userClient.get());
+           User user = verifyIfUserExists(userId);
+           Seller userSeller = verifyIfSellerExists(sellerId);
 
-           clientRepository.save(userClient.get());
-           sellerRepository.save(userSeller.get());
+           if(!userFollowsSeller(user, userSeller)){
+               user.addFollow(userSeller);
+               userSeller.addFollower(user);
+
+               if(user.getType().equals("C")){
+                   Client client = (Client) user;
+                   clientRepository.save(client);
+               }
+               else {
+                   Seller seller = (Seller) user;
+                   sellerRepository.save(seller);
+               }
+               sellerRepository.save(userSeller);
+           }
 
            return new ResponseEntity<>(HttpStatus.OK);
-       }catch (UserNotFoundException e){
+       }catch (UserNotFoundException | UserInvalidException e){
            return handleException(e);
        }
 
     }
 
-    private Optional<Client> verifyIfClientExists(Long clientId) throws UserNotFoundException {
-        Optional<Client> userO = clientRepository.findById(clientId);
-        if (userO.isEmpty()){
-            throw new UserNotFoundException(clientId.toString());
-        }
-        return userO;
+    private boolean userFollowsSeller(User user, Seller seller){
+        return user.findSellerInFollowedList(seller);
     }
 
-    private Optional<Seller> verifyIfSellerExists(Long sellerId) throws UserNotFoundException {
-        Optional<Seller> userO = sellerRepository.findById(sellerId);
-        if (userO.isEmpty()){
-            throw new UserNotFoundException(sellerId.toString());
+    private User verifyIfUserExists(Long userId) throws UserNotFoundException, UserInvalidException {
+
+        if(clientRepository.existsById(userId)){
+            Optional<Client> clientO = clientRepository.findById(userId);
+            return clientO.get();
         }
-        return userO;
+        else if(sellerRepository.existsById(userId)){
+            Optional<Seller> sellerO = sellerRepository.findById(userId);
+            return sellerO.get();
+        }
+        else{
+            throw new UserInvalidException("User with id "+ userId.toString());
+        }
+    }
+
+    private Seller verifyIfSellerExists(Long sellerId) throws UserNotFoundException{
+        if(sellerRepository.existsById(sellerId)){
+            Optional<Seller> sellerO = sellerRepository.findById(sellerId);
+            return sellerO.get();
+        }
+        else{
+            throw new UserNotFoundException("Seller with id" + sellerId.toString());
+        }
     }
 
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleException(Exception e){
         if(e.getClass().equals(UserNotFoundException.class)){
-            ErrorDTO errorDTO = new ErrorDTO("User", "The User with id " + e.getMessage() + " is invalid.");
+            ErrorDTO errorDTO = new ErrorDTO("User Not Found", e.getMessage() + "not found");
 
             return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
         }
         else{
-            ErrorDTO errorDTO = new ErrorDTO("URL Not Found", "The URL with key " + e.getMessage() + " not found.");
-            return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
+            ErrorDTO errorDTO = new ErrorDTO("User Invalid",  e.getMessage() + " is invalid.");
+            return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
         }
 
     }
