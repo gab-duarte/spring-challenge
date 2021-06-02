@@ -63,6 +63,10 @@ public abstract class User {
         this.followedSellers.remove(sellerId);
     }
 
+    public List<Seller> getFollowedSellers() {
+        return followedSellers;
+    }
+
     public boolean findSellerInFollowedList(Seller seller){
         return this.followedSellers.contains(seller);
     }
