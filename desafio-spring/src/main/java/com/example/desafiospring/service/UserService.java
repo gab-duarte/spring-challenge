@@ -50,7 +50,17 @@ public class UserService {
        }catch (UserNotFoundException | UserInvalidException e){
            return handleException(e);
        }
+    }
 
+    public ResponseEntity<?> numberOfSellerFollowers(Long sellerId) {
+        try{
+            Seller seller = verifyIfSellerExists(sellerId);
+
+            return new ResponseEntity<>(seller.getFollowers().size(), HttpStatus.OK);
+
+        }catch (UserNotFoundException e){
+            return handleException(e);
+        }
     }
 
     private boolean userFollowsSeller(User user, Seller seller){

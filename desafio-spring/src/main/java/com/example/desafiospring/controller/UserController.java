@@ -25,4 +25,9 @@ public class UserController {
     public ResponseEntity<?> followSeller(@PathVariable Long userId, @PathVariable Long userIdToFollow) {
         return userService.clientFollowSeller(userId, userIdToFollow);
     }
+
+    @GetMapping(path = "/{userId}/followers/count")
+    public ResponseEntity<?> numberOfSellerFollowers(@PathVariable Long userId){
+        return userService.numberOfSellerFollowers(userId);
+    }
 }
