@@ -1,5 +1,7 @@
 package com.example.desafiospring.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -15,6 +17,7 @@ public class Seller extends User{
     private List<User> followers = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller")
+    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
     public Seller(String userName, String email) {

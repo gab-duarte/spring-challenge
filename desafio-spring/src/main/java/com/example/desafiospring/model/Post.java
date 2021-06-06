@@ -1,32 +1,30 @@
 package com.example.desafiospring.model;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-public class Post {
+public class Post implements Comparable<Post> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String postId;
+    private Long postId;
 
     @ManyToOne
     private Seller seller;
 
-    private Date date;
-
+    private final LocalDate date = LocalDate.now();
 
     @OneToOne
     private Product product;
+    private Integer category;
+    private Double price;
+    private Boolean hasPromo;
+    private Double discount;
 
-    private String category;
-    private double price;
-    private boolean hasPromo = false;
-    private double discount;
-
-    public Post(String postId, Date date, Product product, String category, double price, boolean hasPromo, double discount) {
+    public Post(Long postId, Seller seller, Product product, Integer category, Double price, Boolean hasPromo, Double discount) {
         this.postId = postId;
-        this.date = date;
+        this.seller = seller;
         this.product = product;
         this.category = category;
         this.price = price;
@@ -34,9 +32,9 @@ public class Post {
         this.discount = discount;
     }
 
-    public Post(String postId, Date date, Product product, String category, double price) {
+    public Post(Long postId, Seller seller, Product product, Integer category, Double price) {
         this.postId = postId;
-        this.date = date;
+        this.seller = seller;
         this.product = product;
         this.category = category;
         this.price = price;
@@ -46,7 +44,7 @@ public class Post {
 
     }
 
-    public String getPostId() {
+    public Long getPostId() {
         return postId;
     }
 
@@ -58,12 +56,8 @@ public class Post {
         this.seller = seller;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public Product getProduct() {
@@ -74,35 +68,54 @@ public class Post {
         this.product = product;
     }
 
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public boolean isHasPromo() {
+    public Boolean getHasPromo() {
         return hasPromo;
     }
 
-    public void setHasPromo(boolean hasPromo) {
+    public void setHasPromo(Boolean hasPromo) {
         this.hasPromo = hasPromo;
     }
 
-    public double getDiscount() {
+    public Double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", seller=" + seller +
+                ", date=" + date +
+                ", product=" + product +
+                ", category=" + category +
+                ", price=" + price +
+                ", hasPromo=" + hasPromo +
+                ", discount=" + discount +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Post o) {
+        return this.getDate().compareTo(o.getDate());
     }
 }

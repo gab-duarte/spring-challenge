@@ -1,7 +1,6 @@
 package com.example.desafiospring.dto;
 
 import com.example.desafiospring.model.Seller;
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;

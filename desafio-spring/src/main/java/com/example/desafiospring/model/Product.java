@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Product {
@@ -12,14 +13,17 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
+    @NotBlank(message = "Name is mandatory")
     private String name;
+    @NotBlank(message = "Type is mandatory")
     private String type;
+    @NotBlank(message = "Brand is mandatory")
     private String brand;
+    @NotBlank(message = "Name is mandatory")
     private String color;
     private String notes;
 
-    public Product(Long productId, String name, String type, String brand, String color, String notes) {
-        this.productId = productId;
+    public Product(String name, String type, String brand, String color, String notes) {
         this.name = name;
         this.type = type;
         this.brand = brand;

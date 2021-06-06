@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followSeller(@PathVariable Long userId, @PathVariable Long userIdToFollow) {
-        return userService.clientFollowSeller(userId, userIdToFollow);
+        return userService.userFollowSeller(userId, userIdToFollow);
     }
 
     @GetMapping(path = "/{userId}/followers/count")
@@ -32,12 +32,17 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}/followers/list")
-    public ResponseEntity<?> sellerFollowersList(@PathVariable Long userId){
-        return userService.getFollowersList(userId);
+    public ResponseEntity<?> sellerFollowersList(@PathVariable Long userId, @RequestParam(required = false) String order){
+        return userService.getFollowersList(userId, order);
     }
 
     @GetMapping(path = "/{userId}/followed/list")
     public ResponseEntity<?> followedList(@PathVariable Long userId){
         return userService.getSellersFollowedByUsers(userId);
+    }
+
+    @PostMapping(path = "/{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity<?> unfollowSeller(@PathVariable Long userId, @PathVariable Long userIdToUnfollow){
+        return userService.userUnfollowSeller(userId, userIdToUnfollow);
     }
 }

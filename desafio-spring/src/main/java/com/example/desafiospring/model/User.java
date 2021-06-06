@@ -1,6 +1,8 @@
 package com.example.desafiospring.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +10,10 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.STRING)
-public abstract class User {
+public abstract class User implements Comparable<User>{
 
     @ManyToMany
+    @JsonManagedReference
     private List<Seller> followedSellers = new ArrayList<>();
 
     @Id
@@ -29,6 +32,10 @@ public abstract class User {
 
     public User() {
 
+    }
+
+    public int compareTo(User user){
+        return this.name.compareTo(user.getName());
     }
 
     public Long getId() {
