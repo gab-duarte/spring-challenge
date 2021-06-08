@@ -1,5 +1,7 @@
 package com.example.desafiospring.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
