@@ -6,6 +6,7 @@
 
 - https://www.getpostman.com/collections/e166a8067cc4c0aad56e
 
+Use the link above on Postman to import the collection
 
 ## Requirements
 
