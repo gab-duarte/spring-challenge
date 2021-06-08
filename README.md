@@ -43,7 +43,7 @@ To test the application:
   
   You can change de post date in the sql query.
   
-  Access the endpoint Products from Followed List with Param "order = date_asc" or "order = date_desc"
+  Access the endpoint "Products from Followed List" with Param "order = date_asc" or "order = date_desc"
 
 Use the postman colletion to test the application and the h2 database to check persisted data
 
