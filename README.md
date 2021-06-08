@@ -59,6 +59,8 @@ Create a new post
 
 ### [GET] Products from Followed List
 
+Returns the list of products from sellers that a user follows
+
 ### [POST] User unfollow Seller
 
 User unfollow a seller
