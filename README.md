@@ -21,8 +21,13 @@ To access the in-memory database H2:
 
 - Run the project
 - Access http://localhost:8080/h2-console
+
+To access the documentation:
 - Access [Swagger Documentation](http://localhost:8080/swagger-ui.html#/)
-- Access the postman collection to test the API
+
+To test the application:
+
+- Access the postman collection
 
 Use the postman colletion to test the application and the h2 database to check persisted data
 
